@@ -3,30 +3,35 @@ import java.util.Scanner;
 
 public class GuessTheNumber {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         Random random = new Random();
+//        System.out.println(randomNumber);
+        Scanner scanner = new Scanner(System.in);
+        int guess = 0;
 
-        int numberToGuess = random.nextInt(100) + 1;
-        int attempts = 0;
-        int guess;
+        int count = 0;
 
-        System.out.println("Welcome to Guess the Number Game!");
-        System.out.println("I'm thinking of a number between 1 and 100...");
+        char respond = 'y';
 
-        do {
-            System.out.print("Enter your guess: ");
-            guess = scanner.nextInt();
-            attempts++;
+        do{
+            int randomNumber = random.nextInt(100);
+            while (guess != randomNumber) {
+                System.out.println("Enter the number you guessed: ");
+                guess = scanner.nextInt();
 
-            if (guess < numberToGuess) {
-                System.out.println("Too low! Try again.");
-            } else if (guess > numberToGuess) {
-                System.out.println("Too high! Try again.");
-            } else {
-                System.out.println("Congratulations! You guessed it in " + attempts + " attempts.");
+                if (guess == randomNumber) {
+                    count++;
+                    System.out.println("you have guessed the Correct number");
+                    System.out.println("you guessed in " + count + " attempts");
+                } else if (guess > randomNumber) {
+                    System.out.println("Enter the lower number");
+                } else {
+                    System.out.println("Enter the higher number");
+                }
+                count++;
             }
-        } while (guess != numberToGuess);
-
-        scanner.close();
+            System.out.println("Do you want to play this game again? Enter (Y/N) for Yes - y & for No - n");
+            respond = scanner.next().charAt(0);
+        }while (respond == 'y');
+        System.out.println("Thanks for this game");
     }
 }
