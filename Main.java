@@ -1,36 +1,33 @@
 import java.io.IO;
 
-class TicketCounter{
+class TicketCounter {
     private int availableTickets = 5;
 
-    //synchronized keyword will allow only one thread (passenger) at a time to access this method.
-    public synchronized void bookTicket(String passengerName, int numberOfTicker) throws InterruptedException {
-//        waiting list
-        while(numberOfTicker>availableTickets){
-            IO.println(passengerName + " No enough tickets are available so kindly wait...");
-            wait(); //it will keep the thread(passenger) in the waiting list
+    // synchronized: this keyword basically allow one thread to access this at one time.
+    public synchronized void bookTicket(String passengerName, int numberOfTickets) throws InterruptedException {
+        while(availableTickets<numberOfTickets){
+            IO.println(passengerName + " No enough tickets are available please wait..");
+            wait(); //it will allow a thread (passenger) to wait in the waiting list.
         }
-        availableTickets = availableTickets - numberOfTicker;
-        IO.println(passengerName + " you have booked "+numberOfTicker+" sit(s) successfully.");
-        IO.println("Now available sits: "+ availableTickets);
+        availableTickets = availableTickets - numberOfTickets;
+        IO.println(passengerName + " you have booked " + numberOfTickets + " sit(s) successfully.");
+        IO.println("Now available tickets are : " + availableTickets);
     }
 
-    public synchronized void cancelTicket(int cancelledTickets){
-        availableTickets = availableTickets + cancelledTickets;
-
-        IO.println("now sit count has increased so you can book the tickets");
-
-//        notify(); //it will notify only one thread (passenger)
-        notifyAll(); // it will notify all waiting thread (passengers)
+    public synchronized void cancelTicket(int canceledTicket){
+        availableTickets = availableTickets + canceledTicket;
+        IO.println("Now number of Tickets has been increased so you can book the tickets");
+        notifyAll(); // it will notify all the threads are in the waiting list.
+//        notify(); //it will notify only one thread in waiting list
     }
-
 }
-class Passenger extends Thread{
+
+class Passenger extends Thread {
     private String name;
     private int tickets;
     private TicketCounter tc;
 
-    public Passenger(String name, int tickets, TicketCounter tc){
+    public Passenger(String name, int tickets, TicketCounter tc) {
         this.name = name;
         this.tickets = tickets;
         this.tc = tc;
@@ -46,16 +43,18 @@ class Passenger extends Thread{
     }
 }
 
-public class Main {
-    public static void main(String[] args) throws InterruptedException {
+public class Main{
+    void main(String[] args) throws InterruptedException {
         TicketCounter tc = new TicketCounter();
 
-        Passenger p1 = new Passenger("Yash",2, tc);
-        Passenger p2 = new Passenger("karishma",2, tc);
-        Passenger p3 = new Passenger("janakiram",2, tc);
-        Passenger p4 = new Passenger("spider-man",2, tc);
+        //these are the threads
+        Passenger p1 = new Passenger("uday",2, tc);
+        Passenger p2 = new Passenger("divesh",2, tc);
+        Passenger p3 = new Passenger("Arati",2, tc);
+        Passenger p4 = new Passenger("Parth",2, tc);
 
-        p1.start(); // this start method will envoke the every thread(passenger) at the same time.
+        //start(): it will start executing (invoking) the all threads at the same time.
+        p1.start();
         p2.start();
         p3.start();
         p4.start();
@@ -63,14 +62,18 @@ public class Main {
 
         Thread.sleep(10000);
 
-        IO.println("Ankit has canceled Tickets");
+        IO.println("Jaya has canceled some tickets");
 
-        Thread.sleep(10000);
+
+        Thread.sleep(5000);
 
         tc.cancelTicket(5);
 
 
 
+
+
     }
+
 
 }
