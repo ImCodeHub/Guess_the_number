@@ -1,79 +1,109 @@
+import java.io.File;
 import java.io.IO;
+import java.util.Arrays;
 
-class TicketCounter {
-    private int availableTickets = 5;
-
-    // synchronized: this keyword basically allow one thread to access this at one time.
-    public synchronized void bookTicket(String passengerName, int numberOfTickets) throws InterruptedException {
-        while(availableTickets<numberOfTickets){
-            IO.println(passengerName + " No enough tickets are available please wait..");
-            wait(); //it will allow a thread (passenger) to wait in the waiting list.
+enum Role{
+    ADMIN {
+        @Override
+        public boolean canDelete() {
+            return true;
         }
-        availableTickets = availableTickets - numberOfTickets;
-        IO.println(passengerName + " you have booked " + numberOfTickets + " sit(s) successfully.");
-        IO.println("Now available tickets are : " + availableTickets);
-    }
 
-    public synchronized void cancelTicket(int canceledTicket){
-        availableTickets = availableTickets + canceledTicket;
-        IO.println("Now number of Tickets has been increased so you can book the tickets");
-        notifyAll(); // it will notify all the threads are in the waiting list.
-//        notify(); //it will notify only one thread in waiting list
-    }
+        @Override
+        public boolean canAdd() {
+            return true;
+        }
+    },
+    USER {
+
+        @Override
+        public boolean canDelete() {
+            return false;
+        }
+
+        @Override
+        public boolean canAdd() {
+            return true;
+        }
+    },
+    CASUAL_USER {
+        @Override
+        public boolean canDelete() {
+            return false;
+        }
+
+        @Override
+        public boolean canAdd() {
+            return false;
+        }
+    };
+
+    public abstract boolean canDelete();
+    public abstract boolean canAdd();
+
+
 }
 
-class Passenger extends Thread {
-    private String name;
-    private int tickets;
-    private TicketCounter tc;
+class Address{
+    String city;
+    int pin;
 
-    public Passenger(String name, int tickets, TicketCounter tc) {
-        this.name = name;
-        this.tickets = tickets;
-        this.tc = tc;
+    public Address(String city, int pin) {
+        this.city = city;
+        this.pin = pin;
     }
 
     @Override
-    public void run() {
-        try {
-            tc.bookTicket(name, tickets);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    public String toString() {
+        return "Address{" +
+                "city='" + city + '\'' +
+                ", pin=" + pin +
+                '}';
     }
 }
 
-public class Main{
-    void main(String[] args) throws InterruptedException {
-        TicketCounter tc = new TicketCounter();
+class Person{
+    String name;
+    Address address;
 
-        //these are the threads
-        Passenger p1 = new Passenger("uday",2, tc);
-        Passenger p2 = new Passenger("divesh",2, tc);
-        Passenger p3 = new Passenger("Arati",2, tc);
-        Passenger p4 = new Passenger("Parth",2, tc);
-
-        //start(): it will start executing (invoking) the all threads at the same time.
-        p1.start();
-        p2.start();
-        p3.start();
-        p4.start();
-
-
-        Thread.sleep(10000);
-
-        IO.println("Jaya has canceled some tickets");
-
-
-        Thread.sleep(5000);
-
-        tc.cancelTicket(5);
-
-
-
-
-
+    public Person(String name, Address address) {
+        this.name = name;
+        this.address = address;
     }
 
-
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", address=" + address +
+                '}';
+    }
 }
+public class Main {
+    public void main(String[] xyz) {
+
+        Address a1 = new Address("Indore",459001);
+        Person p1 = new Person("Ankit",a1);
+
+        Person p2 = new Person(p1.name, new Address(p1.address.city,p1.address.pin ));
+
+        p2.address.city="delhi";
+
+        IO.println(p1);
+        IO.println(p2);
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
