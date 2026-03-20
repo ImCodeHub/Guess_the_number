@@ -1,6 +1,8 @@
 package Interface;
 
 import java.io.IO;
+import java.security.MessageDigest;
+import java.util.Comparator;
 
 @FunctionalInterface
 interface Display{
@@ -23,6 +25,11 @@ class Email implements Messenger {
 //        IO.println("sending SMS......");
 //    }
 //}
+
+@FunctionalInterface
+interface Messanger1{
+    public String send(String str);
+}
 
 public class Main {
     public static void main(String[] args){
@@ -51,6 +58,11 @@ public class Main {
         System.out.println(cal.add(20,15));
         System.out.println(cal1.add(20,15));
         System.out.println(dis.show("Nisha"));
+
+        Messanger1 mess = (s) -> "message sending: "+s;
+
+        String send = mess.send("hello Nisha how are you?");
+        System.out.println(send);
 
     }
 }
