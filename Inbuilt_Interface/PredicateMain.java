@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 
 //boolean test(T t);
-public class Main {
+public class PredicateMain {
     public static void main(String[] args) {
 
         Predicate<Integer> pr = a -> a % 2 == 0;
