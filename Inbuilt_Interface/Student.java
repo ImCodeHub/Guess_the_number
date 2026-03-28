@@ -1,6 +1,6 @@
 package Inbuilt_Interface;
 
-public class Student {
+public class Student implements Comparable<Student>{
     private String name;
     private int age;
     private int height;
@@ -53,5 +53,14 @@ public class Student {
                 ", height=" + height +
                 ", schoolName='" + schoolName + '\'' +
                 '}';
+    }
+
+
+    @Override
+    public int compareTo(Student other){
+        return Integer.compare(this.age,other.age);
+        //10> 5 = 1
+        //10<5 = -1
+        //10==10 = 0
     }
 }
