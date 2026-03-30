@@ -13,6 +13,9 @@ public class Student implements Comparable<Student>{
         this.schoolName = schoolName;
     }
 
+    public Student() {
+    }
+
     public String getName() {
         return name;
     }
