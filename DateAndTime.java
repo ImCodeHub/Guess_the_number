@@ -29,6 +29,41 @@ public class DateAndTime {
 
         System.out.println(zonedDateTime);
 
+        //local time
+        System.out.println(LocalTime.now());
+
+        //Date formatter
+        System.out.println("Today's date: "+date);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd / MM / yyyy");
+
+        String formatedDate = date.format(dateTimeFormatter);
+        System.out.println("Date after format: "+formatedDate);
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter1 = DateTimeFormatter.ofPattern("dd - MM - yyyy | hh : mm : ss");
+        String format = localDateTime.format(dateTimeFormatter1);
+        System.out.println("formated date and time: "+format);
+
+        System.out.println(freedom);
+
+        String dinank = "20--/--04----2027";
+
+        DateTimeFormatter starPattern = DateTimeFormatter.ofPattern("dd--/--MM----yyyy");
+
+        LocalDate parse = LocalDate.parse(dinank, starPattern);
+
+        System.out.println("after parse: "+parse);
+
+        Period between = Period.between(freedom, parse);
+        System.out.println(between.getYears());
+
+        LocalTime time1 = LocalTime.of(11, 20);
+        LocalTime time2 = LocalTime.of(17, 25);
+
+        Duration duration = Duration.between(time1, time2);
+
+        System.out.println(duration.toHours() +" : "+duration.toMinutesPart());
+        System.out.println(duration.toMinutes());
     }
 
 }
